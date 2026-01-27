@@ -1,5 +1,6 @@
 package org.eckelsoft.chunkblockmod;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ModInitializer;
@@ -49,6 +50,17 @@ public class Chunkblockmod implements ModInitializer {
                                 ModState.setActive(false, c.getSource().getServer());
                                 return 1;
                             })
+                    )
+
+                    .then(CommandManager.literal("fluids")
+                            .then(CommandManager.argument("enabled", BoolArgumentType.bool())
+                                    .executes(c -> {
+                                        boolean enabled = BoolArgumentType.getBool(c, "enabled");
+                                        ModState.setReplaceFluids(enabled);
+                                        c.getSource().sendFeedback(() -> Text.literal("Replace Fluids: " + enabled), false);
+                                        return 1;
+                                    })
+                            )
                     )
 
                     .then(CommandManager.literal("reset")

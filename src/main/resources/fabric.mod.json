@@ -3,11 +3,16 @@
   "id": "chunkblockmod",
   "version": "2.0.1",
   "name": "ChunkBlockMod",
-  "description": "",
-  "authors": [],
+  "description": "Every chunk you visit is randomized to a new blocktype!",
+  "authors": ["Eckelsoft"],
   "contact": {},
+  "contact": {
+    "homepage": "https://modrinth.com/mod/chunk-randomizer",
+    "sources": "https://github.com/eckelsoft/Chunk-Randomizer"
+  },
+
   "license": "All-Rights-Reserved",
-  "icon": "icon.png",
+  "icon": "assets/chunkblockmod/icon.png",
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
@@ -29,6 +34,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": ">=1.21.9 <=1.21.11"
   }
 }

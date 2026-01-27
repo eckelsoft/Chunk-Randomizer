@@ -821,11 +821,9 @@ public class ChunkReplacementManager {
                 boolean hasChunkWalker = false;
 
                 if (!boots.isEmpty()) {
-                    // Check 1: Name (für das Buch-System)
                     if (boots.getName().getString().contains("Chunk Walker")) {
                         hasChunkWalker = true;
                     }
-                    // Check 2: Echte Verzauberung (falls vorhanden)
                     if (!hasChunkWalker) {
                         hasChunkWalker = EnchantmentHelper.getEnchantments(boots).getEnchantments().stream()
                                 .anyMatch(e -> e.getKey().get().getValue().toString().equals("chunkblockmod:chunk_walker"));
@@ -851,7 +849,9 @@ public class ChunkReplacementManager {
                 processChunk(world, currentPos, player);
             }
         }
-        if (world.getTime() % 100 == 0) removeExcessItems(world);
+        if (world.getServer().getTicks() % 100 == 0) {
+            removeExcessItems(world);
+        }
     }
 
     private static void processChunk(ServerWorld world, ChunkPos chunkPos, ServerPlayerEntity player) {
@@ -872,7 +872,22 @@ public class ChunkReplacementManager {
                 for (int y = world.getBottomY(); y < world.getBottomY() + world.getHeight(); y++) {
                     mutablePos.set(x, y, z);
                     BlockState currentState = world.getBlockState(mutablePos);
-                    if (currentState.isAir() || PROTECTED_BLOCKS.contains(currentState.getBlock()) || currentState.isOf(targetBlock)) continue;
+                    Block block = currentState.getBlock();
+
+                    if (currentState.isAir()) continue;
+
+                    boolean isFluid = (block == net.minecraft.block.Blocks.WATER ||
+                            block == net.minecraft.block.Blocks.LAVA ||
+                            block == net.minecraft.block.Blocks.FIRE);
+
+                    if (PROTECTED_BLOCKS.contains(block)) {
+                        if (!(isFluid && ModState.shouldReplaceFluids())) {
+                            continue;
+                        }
+                    }
+
+                    if (currentState.isOf(targetBlock)) continue;
+
                     world.setBlockState(mutablePos, targetBlock.getDefaultState(), Block.NOTIFY_LISTENERS);
                 }
             }

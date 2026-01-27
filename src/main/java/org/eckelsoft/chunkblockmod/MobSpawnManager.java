@@ -46,12 +46,12 @@ public class MobSpawnManager {
             try {
                 type.spawn(world, spawnPos, SpawnReason.EVENT);
             } catch (Exception e) {
-                // Fehler ignorieren
+                // ignore
             }
         }
 
         if (ModState.getDebugLevel() == 1) {
-            player.sendMessage(Text.literal("§6[Debug] " + amount + " mobs have spawned!").formatted(Formatting.GOLD), false);
+            player.sendMessage(Text.literal("§6" + amount + " mobs have spawned!").formatted(Formatting.GOLD), false);
         }
     }
 }

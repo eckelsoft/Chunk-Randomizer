@@ -1,3 +1,6 @@
-.gradle
 .idea
+.gradle
+gradle
+build
 run
+!build/libs/
