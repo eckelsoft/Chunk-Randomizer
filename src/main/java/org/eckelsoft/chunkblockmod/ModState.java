@@ -1,5 +1,9 @@
 package org.eckelsoft.chunkblockmod;
 
+import java.util.HashSet;
+import java.util.Set;
+import net.minecraft.block.*;
+
 public class ModState {
     private static boolean active = false;
     private static int debugLevel = 1;
@@ -54,4 +58,16 @@ public class ModState {
     public static void setTimerPrefix(String prefix) { timerPrefix = prefix; }
     public static String getTimerSuffix() { return timerSuffix; }
     public static void setTimerSuffix(String suffix) { timerSuffix = suffix; }
+
+    // Discord user request - manually exclude replace-blocks
+    private static final Set<Block> customBlacklist = new HashSet<>();
+    public static void addToBlacklist(Block block) {
+        customBlacklist.add(block);
+    }
+    public static void clearCustomBlacklist() {
+        customBlacklist.clear();
+    }
+    public static Set<Block> getCustomBlacklist() {
+        return customBlacklist;
+    }
 }

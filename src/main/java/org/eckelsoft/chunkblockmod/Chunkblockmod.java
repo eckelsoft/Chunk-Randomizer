@@ -1,5 +1,7 @@
 package org.eckelsoft.chunkblockmod;
 
+import net.minecraft.block.*;
+import net.minecraft.command.argument.*;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -26,7 +28,7 @@ public class Chunkblockmod implements ModInitializer {
 
             Text message = !ModState.isActive() ?
                     (timeMs == 0 ?
-                            Text.literal("Type \"/rc start\" to begin. Config: \"/rc effects|timer|spawnmonster\"").formatted(Formatting.YELLOW) :
+                            Text.literal("Type \"/rc start\" to begin. Config: \"/rc \"").formatted(Formatting.YELLOW) :
                             Text.literal("Paused: " + fullDisplay).formatted(Formatting.RED)) :
                     Text.literal(fullDisplay).formatted(Formatting.GREEN);
 
@@ -79,6 +81,32 @@ public class Chunkblockmod implements ModInitializer {
                                 );
                                 return 1;
                             })
+                    )
+
+                    .then(CommandManager.literal("exclude")
+                            .requires(source -> source.hasPermissionLevel(2)) // Nur für Admins/OPs
+                            .executes(c -> {
+                                c.getSource().sendFeedback(() -> Text.literal("USE: /rc exclude add <block> OR: /rc exclude clear"), false);
+                                return 1;
+                            })
+                            .then(CommandManager.literal("add")
+                                    .then(CommandManager.argument("block", BlockStateArgumentType.blockState(registryAccess))
+                                            .executes(c -> {
+                                                Block block = BlockStateArgumentType.getBlockState(c, "block").getBlockState().getBlock();
+                                                ModState.addToBlacklist(block);
+                                                c.getSource().sendFeedback(() -> Text.literal("§6[ChunkMod] §f" + block.getName().getString() + " will be skipped from now on."), true);
+                                                return 1;
+                                            })
+                                    )
+                            )
+                            .then(CommandManager.literal("clear")
+                                    .executes(c -> {
+                                        ModState.clearCustomBlacklist();
+                                        ChunkReplacementManager.reloadBlocks(c.getSource().getWorld());
+                                        c.getSource().sendFeedback(() -> Text.literal("Custom blacklist cleared."), true);
+                                        return 1;
+                                    })
+                            )
                     )
 
                     .then(CommandManager.literal("debug")

@@ -43,15 +43,15 @@ public class EffectManager {
             effect.value().applyUpdateEffect(world, player, amplifier);
 
             if (ModState.getDebugLevel() == 3) {
-                player.sendMessage(Text.literal("§d[Debug] Instant-Effect: " + effect.value().getName().getString()).formatted(Formatting.LIGHT_PURPLE), false);
+                player.sendMessage(Text.literal("§d[LOG] Instant-Effect: " + effect.value().getName().getString()).formatted(Formatting.LIGHT_PURPLE), false);
             }
         } else {
             amplifier = chunkRandom.nextInt(5);
-            int durationTicks = 20 * 30;
+            int durationTicks = chunkRandom.nextBoolean() ? (20 * 8) : (20 * 16);
             player.addStatusEffect(new StatusEffectInstance(effect, durationTicks, amplifier));
 
             if (ModState.getDebugLevel() == 3) {
-                player.sendMessage(Text.literal("§d[Debug] Effect: " + effect.value().getName().getString() + " (Amp: " + amplifier + ")").formatted(Formatting.LIGHT_PURPLE), false);
+                player.sendMessage(Text.literal("§d[LOG] Effect: " + effect.value().getName().getString() + " (Duration: " + (durationTicks/20) + "s, Amp: " + amplifier + ")").formatted(Formatting.LIGHT_PURPLE), false);
             }
         }
     }
