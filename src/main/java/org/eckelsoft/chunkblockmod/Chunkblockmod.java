@@ -84,7 +84,6 @@ public class Chunkblockmod implements ModInitializer {
                     )
 
                     .then(CommandManager.literal("exclude")
-                            .requires(source -> source.hasPermissionLevel(2)) // Nur für Admins/OPs
                             .executes(c -> {
                                 c.getSource().sendFeedback(() -> Text.literal("USE: /rc exclude add <block> OR: /rc exclude clear"), false);
                                 return 1;

@@ -1,11 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "chunkblockmod",
-  "version": "2.1.0",
+  "version": "${version}",
   "name": "ChunkBlockMod",
   "description": "Every chunk you visit is randomized to a new blocktype!",
   "authors": ["Eckelsoft"],
-  "contact": {},
   "contact": {
     "homepage": "https://modrinth.com/mod/chunk-randomizer",
     "sources": "https://github.com/eckelsoft/Chunk-Randomizer"
@@ -33,7 +32,7 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric-api": "*",
+    "fabric-api": ">=${min_fabric_api_version}",
     "minecraft": ">=1.21.9 <=1.21.11"
   }
 }
