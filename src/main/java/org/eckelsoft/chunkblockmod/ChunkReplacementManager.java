@@ -22,7 +22,6 @@ import java.util.*;
 
 public class ChunkReplacementManager {
     private static final Map<UUID, ChunkPos> lastChunkPos = new HashMap<>();
-    private static final Set<ChunkPos> globalVisitedChunks = new HashSet<>();
     private static final List<Block> validReplacementBlocks = new ArrayList<>();
     private static final Set<Block> PROTECTED_BLOCKS = new HashSet<>();
     private static final Set<Block> REPLACEMENT_BLACKLIST = new HashSet<>();
@@ -908,6 +907,7 @@ public class ChunkReplacementManager {
                 }
 
                 if (hasChunkWalker) {
+                    EffectManager.clearChunkEffect(player);
                     if (!player.isCreative()) {
                         boots.damage(10, world, player, item -> player.sendEquipmentBreakStatus(item, EquipmentSlot.FEET));
                     }
@@ -917,12 +917,6 @@ public class ChunkReplacementManager {
                     continue;
                 }
 
-                if (!globalVisitedChunks.contains(currentPos)) {
-                    globalVisitedChunks.add(currentPos);
-                    if (globalVisitedChunks.size() % ModState.getSpawnInterval() == 0) {
-                        MobSpawnManager.triggerSurpriseSpawn(world, player);
-                    }
-                }
                 processChunk(world, currentPos, player);
             }
         }
